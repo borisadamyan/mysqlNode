@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <label for="">
+        Gender:
+        <select name="" id="gender">
+            <option value="all">All</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+    </label><br/>
+
+    <label for="">
+        Search By username:
+        <input  type="text" placeholder="Username" id="searchUsername">
+    </label>
+</div><br/>
+
+<form action="">
+    <label for="">
+        Custom Search:
+    </label><br>
+    <select name="gender" id="formSelect">
+        <option value="all">All</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    <input type="text" name="name" placeholder="Name">
+    <input required type="text" name="id" placeholder="ID equal or great">
+    <button type="submit" id="searchBtn">search</button>
+</form>
+<div id="table" style="text-align: center"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
