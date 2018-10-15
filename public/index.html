@@ -8,35 +8,103 @@
     <title>Document</title>
 </head>
 <body>
-<div>
-    <label for="">
-        Gender:
-        <select name="" id="gender">
+<section>
+        <form id="search" style="display: flex; justify-content: space-around; background: lightblue; margin-bottom: 15px; padding: 5px" action="">
+            <label for="">
+                Gender:<br>
+                <select name="" id="gender">
+                    <option value="all">All</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </label>
+
+            <label for="">
+                Search By username:<br>
+                <input  type="text" placeholder="Username" id="searchUsername">
+            </label>
+        <label for="">
+            Custom Search:<br>
+
+        <select name="gender" id="formSelect">
             <option value="all">All</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>
-    </label><br/>
 
-    <label for="">
-        Search By username:
-        <input  type="text" placeholder="Username" id="searchUsername">
-    </label>
-</div><br/>
+        <input type="text" name="name" placeholder="Name">
+        <input required type="text" name="id" placeholder="ID equal or great">
+        <button type="submit" id="searchBtn">search</button>
+        </label>
 
-<form action="">
-    <label for="">
-        Custom Search:
-    </label><br>
-    <select name="gender" id="formSelect">
-        <option value="all">All</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select>
-    <input type="text" name="name" placeholder="Name">
-    <input required type="text" name="id" placeholder="ID equal or great">
-    <button type="submit" id="searchBtn">search</button>
-</form>
+            <button type="reset" id="reset">Reset</button>
+    </form>
+        <form id="add"  style="display: flex; justify-content: space-around; background: lightgreen; margin-bottom: 15px; padding: 5px">
+        <label for="">
+            First Name<br>
+            <input required type="text" name="first_name" placeholder=" First Name">
+        </label>
+        <label for="">
+            Last Name<br>
+            <input required type="text" name="last_name" placeholder=" Last Name">
+        </label>
+        <label for="">
+            Username<br>
+            <input type="text" name="username" placeholder="Username">
+        </label>
+        <label for="">
+            Password<br>
+            <input type="password" name="password" placeholder="password">
+        </label>
+        <label for="">
+            Gender<br>
+            <select name="addGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </label>
+        <label for="">
+            Status<br>
+            <select name="addStatus">
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </label>
+        <button type="submit">Add</button>
+    </form>
+</section>
+<div id="userAdded" style="text-align: center;
+    background: greenyellow;
+    display: none;
+    margin: 0 auto;
+    width: 20%;
+    padding: 20px;
+    color: red;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 17px;
+    position: absolute;
+    bottom: 130px;
+    left: 40%;
+    transition: .4s;">
+    New User Added. Thank you!!!
+</div>
+<div id="userDeleted" style="text-align: center;
+    background: greenyellow;
+    display: none;
+    margin: 0 auto;
+    width: 20%;
+    padding: 20px;
+    color: red;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 17px;
+    position: absolute;
+    bottom: 130px;
+    left: 40%;
+    transition: .4s;">
+    User Deleted. Thank you!!!
+</div>
 <div id="table" style="text-align: center"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="app.js"></script>

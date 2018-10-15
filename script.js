@@ -102,9 +102,9 @@ app.post('/customFilter', (req, res) => {
             console.log('Error');
         } else {
             console.log('Connected');
-            if(req.body.gender === 'all'){
+            if (req.body.gender === 'all') {
                 var query = `SELECT * FROM user_details WHERE first_name LIKE "%${req.body.name}%" AND user_id >=${req.body.id} ORDER BY user_id`;
-            }else {
+            } else {
                 var query = `SELECT * FROM user_details WHERE first_name LIKE "%${req.body.name}%" AND user_id >=${req.body.id} AND gender="${req.body.gender}" ORDER BY user_id`;
             }
 
@@ -123,5 +123,49 @@ app.post('/customFilter', (req, res) => {
     });
 });
 
+app.post('/newUser', (req, res) => {
+    "use strict";
+    connection.getConnection((err, content) => {
+        if (!!err) {
+            content.release();
+            console.log(err);
+        } else {
+            console.log('Connect');
+            console.log(req.body);
+            var query = `INSERT INTO user_details (username, first_name, last_name, gender, password, status)
+            VALUES ('${req.body.username}', '${req.body.first_name}', '${req.body.last_name}', '${req.body.gender}', '${req.body.password}', '${req.body.status}');`;
+            content.query(query, (err, rows, fields) => {
+                content.release();
+                if(!!err){
+                    console.log(err);
+                }else{
+                    res.json(rows);
+                }
+            })
+        }
+    });
+});
+
+app.post('/deleteUser', (req, res) => {
+    "use strict";
+    connection.getConnection((err, content) => {
+        if (!!err) {
+            content.release();
+            console.log(err);
+        } else {
+            console.log('Connect');
+            console.log(req.body);
+            var query = `DELETE FROM user_details WHERE user_id = '${req.body.id}'`;
+                content.query(query, (err, rows, fields) => {
+                content.release();
+                if(!!err){
+                    console.log(err);
+                }else{
+                    res.json(rows);
+                }
+            })
+        }
+    });
+});
 
 app.listen(1337);
