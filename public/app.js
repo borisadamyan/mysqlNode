@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
 
+    /*EVENTS*/
     $('#gender').on('change', function (data) {
         console.log(data.target.value);
         if(data.target.value !== 'all') {
@@ -39,7 +40,7 @@ $(document).ready(function () {
     $('form#add').on('submit', function (form) {
        form.preventDefault();
         const formData = new FormData(form.target);
-        console.log($('form#add').serialize());
+        // console.log($('form#add').serialize());
         const gender = formData.get('addGender');
         const status = formData.get('addStatus');
         const first_name = formData.get('first_name');
@@ -58,10 +59,10 @@ $(document).ready(function () {
 
     });
     $(document).on('click', '#deleteUserbtn',  function (event) {
-        console.log(event);
+        // console.log(event);
         var row = event.target.parentNode.parentNode;
         var id = row.getElementsByClassName('idPart')[0].getAttribute('id');
-        console.log(id);
+        // console.log(id);
         var deleteData = {
             id
         };
@@ -72,11 +73,59 @@ $(document).ready(function () {
             return false;
         }
     });
-    // $('#editUser').on('click', function (event) {
-    //     // event.preventDefault();
-    //     console.log(event.target);
-    // });
+    $(document).on('click', '#editUser', function (event) {
+        // event.preventDefault();
+        var row = event.target.parentNode.parentNode;
+        console.log(row);
+        console.log(row.querySelectorAll('input'));
+        row.querySelectorAll('input').forEach(one => {
+            "use strict";
+            one.removeAttribute('readonly');
+            one.classList.remove('readonly');
+        });
+        // event.target.nextSibling.style.display = 'block';
+        event.target.style.display = 'none';
+        event.target.nextElementSibling.style.display = 'inline-block';
+    });
+    $(document).on('click', '#confirmUser', function (event) {
+        // event.preventDefault();
+        var row = event.target.parentNode.parentNode;
+        console.log(row);
+        console.log(row.querySelectorAll('input'));
+        row.querySelectorAll('input').forEach(one => {
 
+            one.setAttribute('readonly', 'readonly');
+            one.classList.add('readonly');
+        });
+        // event.target.nextSibling.style.display = 'block';
+        event.target.style.display = 'none';
+        event.target.previousElementSibling.style.display = 'inline-block';
+        var rowId = event.target.parentNode.parentNode;
+        var id = rowId.getElementsByClassName('idPart')[0].getAttribute('id');
+        console.log(row);
+        const updateData = [];
+        row.querySelectorAll('input').forEach(one => {
+            console.log(one.value);
+            updateData.push({
+                key: one.name,
+                value: one.value
+            })
+        });
+        updateData.push({id});
+        console.log(updateData);
+        // const updateData = {
+        //     id,
+        //     password,
+        //     username,
+        //     last_name,
+        //     first_name,
+        //     status,
+        //     gender
+        // };
+        updateUser(updateData)
+    });
+
+    /*POST REQUESTS*/
     function getDataBySearchUsername(username) {
         var data = { username: username};
         var http = new XMLHttpRequest();
@@ -94,7 +143,7 @@ $(document).ready(function () {
     function getDataByGender(gender){
         var data = { gend: gender};
         var http = new XMLHttpRequest();
-        http.open('POST', '/data');
+        http.open('POST', '/gender');
         http.setRequestHeader("Content-type", "application/json");
         http.send(JSON.stringify(data));
         http.onreadystatechange = function() {//Call a function when the state changes.
@@ -133,7 +182,7 @@ $(document).ready(function () {
                     $('#userAdded').hide();
                 },2500);
                  var id = JSON.parse(http.responseText);
-                console.log(id.insertId);
+                // console.log(id.insertId);
                 const searchData = {
                     id: id.insertId,
                     gender: 'all',
@@ -158,9 +207,25 @@ $(document).ready(function () {
                     "use strict";
                     $('#userDeleted').hide();
                 },2500);
+            }
+        };
+    }
+    function updateUser(data) {
+        var http = new XMLHttpRequest();
+        http.open('POST', '/updateUser');
+        http.setRequestHeader("Content-type", "application/json");
+        http.send(JSON.stringify(data));
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState == 4 && http.status == 200) {
+                console.log("User Updated");
+                // $('form#add')[0].reset();
+                $('#userUpdated').show();
+                setTimeout(() => {
+                    $('#userUpdated').hide();
+                },2500);
 
-                 var id = JSON.parse(http.responseText);
-                console.log(id.insertId);
+                var id = JSON.parse(http.responseText);
+                // console.log(id.insertId);
                 // const searchData = {
                 //     id: id.insertId,
                 //     gender: 'all',
@@ -171,17 +236,30 @@ $(document).ready(function () {
             }
         };
     }
-    function table(dataset) {
+
+
+    /*TBALE CREATING*/
+    function table(dataSet) {
         $('table').remove();
         var table = $('<table style="width: 90%; margin: 20px auto;"></table>');
-        dataset.forEach(tr => {
+        dataSet.forEach(tr => {
             // console.log(tr);
             var row = $('<tr></tr>');
-            var cell = $(`<td class="idPart" id="${tr.user_id}">${tr.user_id}</td><td>${tr.first_name}</td><td>${tr.last_name}</td><td>${tr.username}</td><td>${tr.password}</td><td>${tr.gender}</td><td>${tr.status}</td>
+            var cell = $(`
+                          <td class="idPart" id="${tr.user_id}">${tr.user_id}</td>
+                          <td> <input readonly style="text-align: center" type="text" name="first_name" value="${tr.first_name}" class="readonly"></td>
+                          <td> <input readonly style="text-align: center" type="text" name="last_name" value="${tr.last_name}" class="readonly"></td>
+                          <td> <input readonly style="text-align: center" type="text"  name="username" value="${tr.username}" class="readonly"></td>
+                          <td> <input readonly style="width: 220px; text-align: center" name="password" type="text" value="${tr.password}" class="readonly"></td>
+                          <td> <input readonly style="width: 50px; text-align: center"  name="addGender" type="text" value="${tr.gender}" class="readonly"></td>
+                          <td> <input readonly style="width: 20px; text-align: center" name="addStatus" type="text" value="${tr.status}" class="readonly"></td>
+                        
                         <td>
                         <button id="editUser">Edit</button>
+                        <button style="display: none" id="confirmUser">Save</button>
                         <button id="deleteUserbtn">Delete</button>
-                        </td>`);
+                        </td>
+                     `);
             row.append(cell);
             table.append(row);
 

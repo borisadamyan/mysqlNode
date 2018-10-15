@@ -29,7 +29,7 @@ const connection = mysql.createPool({
 //
 // });
 
-app.post('/data', (req, res) => {
+app.post('/gender', (req, res) => {
     console.log(req.body.gend);
     // console.log(res.body);
     connection.getConnection((err, tempCont) => {
@@ -157,6 +157,47 @@ app.post('/deleteUser', (req, res) => {
             console.log(req.body);
             var query = `DELETE FROM user_details WHERE user_id = '${req.body.id}'`;
                 content.query(query, (err, rows, fields) => {
+                content.release();
+                if(!!err){
+                    console.log(err);
+                }else{
+                    res.json(rows);
+                }
+            })
+        }
+    });
+});
+
+app.post('/updateUser', (req, res) => {
+    var username, first_name, last_name, password, gender, status, id;
+    connection.getConnection((err, content) => {
+        if (!!err) {
+            content.release();
+            console.log(err);
+        } else {
+            console.log('Connect');
+            // console.log(req.body);
+
+            req.body.filter(uName => {
+                // console.log(uName.key);
+                id = uName.id;
+                if(uName.key === 'username'){
+                    username = uName.value;
+                }else if(uName.key === 'first_name'){
+                    first_name = uName.value;
+                } else if(uName.key === 'last_name'){
+                    last_name = uName.value;
+                }else if(uName.key === 'password'){
+                    password = uName.value;
+                }else if(uName.key === 'addGender'){
+                    gender = uName.value;
+                }else if(uName.key === 'addStatus'){
+                    status = uName.value;
+                }
+            });
+            console.log(username);
+            var query = `UPDATE user_details SET username = '${username}', first_name = '${first_name}', last_name = '${last_name}', gender = '${gender}', password='${password}', status = '${status}' WHERE user_id = '${id}'`;
+            content.query(query, (err, rows, fields) => {
                 content.release();
                 if(!!err){
                     console.log(err);
