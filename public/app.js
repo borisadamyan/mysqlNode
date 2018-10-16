@@ -125,50 +125,53 @@ $(document).ready(function () {
         updateUser(updateData)
     });
 
-    /*POST REQUESTS*/
+    /*REQUESTS*/
     function getDataBySearchUsername(username) {
-        var data = { username: username};
-        var http = new XMLHttpRequest();
-        http.open('POST', '/search');
-        http.setRequestHeader("Content-type", "application/json");
-        http.send(JSON.stringify(data));
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                console.log(JSON.parse(http.responseText));
-                table(data);
+        const data = { username: username};
+        $.ajax({
+            url: "/search",
+            type:'get',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                table(response)
+            },
+            error: function(xhr) {
             }
-        };
+        });
     }
     function getDataByGender(gender){
-        var data = { gend: gender};
-        var http = new XMLHttpRequest();
-        http.open('POST', '/gender');
-        http.setRequestHeader("Content-type", "application/json");
-        http.send(JSON.stringify(data));
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                console.log(JSON.parse(http.responseText));
-                table(data);
+        const data = { gend: gender};
+        $.ajax({
+            url: "/gender",
+            type:'get',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                table(response)
+            },
+            error: function(xhr) {
             }
-        };
+        });
     }
-    function customSearch(data) {
-        var http = new XMLHttpRequest();
-        http.open('POST', '/customFilter');
-        http.setRequestHeader("Content-type", "application/json");
-        http.send(JSON.stringify(data));
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
-                var data = JSON.parse(http.responseText);
-                console.log(JSON.parse(http.responseText));
-                table(data);
+    function customSearch(datas) {
+        $.ajax({
+            url: "/customFilter",
+            type:'get',
+            data: datas,
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                table(response)
+            },
+            error: function(xhr) {
             }
-        };
+        });
     }
     function addNewUser(data) {
-        var http = new XMLHttpRequest();
+        const http = new XMLHttpRequest();
         http.open('POST', '/newUser');
         http.setRequestHeader("Content-type", "application/json");
         http.send(JSON.stringify(data));
@@ -194,8 +197,8 @@ $(document).ready(function () {
         };
     }
     function deleteUser(data) {
-        var http = new XMLHttpRequest();
-        http.open('POST', '/deleteUser');
+        const http = new XMLHttpRequest();
+        http.open('DELETE', '/deleteUser');
         http.setRequestHeader("Content-type", "application/json");
         http.send(JSON.stringify(data));
         http.onreadystatechange = function() {//Call a function when the state changes.
@@ -211,8 +214,8 @@ $(document).ready(function () {
         };
     }
     function updateUser(data) {
-        var http = new XMLHttpRequest();
-        http.open('POST', '/updateUser');
+        const http = new XMLHttpRequest();
+        http.open('PUT', '/updateUser');
         http.setRequestHeader("Content-type", "application/json");
         http.send(JSON.stringify(data));
         http.onreadystatechange = function() {//Call a function when the state changes.
@@ -238,14 +241,14 @@ $(document).ready(function () {
     }
 
 
-    /*TBALE CREATING*/
+    /*TABLE CREATING*/
     function table(dataSet) {
         $('table').remove();
-        var table = $('<table style="width: 90%; margin: 20px auto;"></table>');
+        let table = $('<table style="width: 90%; margin: 20px auto;"></table>');
         dataSet.forEach(tr => {
             // console.log(tr);
-            var row = $('<tr></tr>');
-            var cell = $(`
+            let row = $('<tr></tr>');
+            let cell = $(`
                           <td class="idPart" id="${tr.user_id}">${tr.user_id}</td>
                           <td> <input readonly style="text-align: center" type="text" name="first_name" value="${tr.first_name}" class="readonly"></td>
                           <td> <input readonly style="text-align: center" type="text" name="last_name" value="${tr.last_name}" class="readonly"></td>
