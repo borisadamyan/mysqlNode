@@ -114,23 +114,12 @@ $(document).ready(function () {
             })
         });
         updateData.push({id});
-        console.log(updateData);
-        // const updateData = {
-        //     id,
-        //     password,
-        //     username,
-        //     last_name,
-        //     first_name,
-        //     status,
-        //     gender
-        // };
+       // console.log(updateData);
+
         updateUser(updateData)
     });
     $(document).on('click', '#cancel', function (event) {
-        // event.preventDefault();
         var row = event.target.parentNode.parentNode;
-        // console.log(row);
-        // console.log(row.querySelectorAll('input'));
         row.querySelectorAll('input').forEach(one => {
 
             one.setAttribute('readonly', 'readonly');
