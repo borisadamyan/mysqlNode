@@ -7,27 +7,44 @@ const {
     updateUser
 } = require('../service/query');
 
-function api (app) {
+ function api (app) {
 
     app.get('/gender', (req, res) => {
         // selectByGenderOrderBy(req.query.gend, 'user_id', (result) => {
         //     res.json(result);
         // });
-        selectByGenderOrderBy(req.query.gend, 'user_id').then(w => {
-            // console.log(w);
-            res.json(w);
-        }).catch(err => console.error(err));
+       const gender = async () => {
+            try {
+                const result = await selectByGenderOrderBy(req.query.gend, 'user_id');
+                res.send(result);
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        gender();
+
+
+        // selectByGenderOrderBy(req.query.gend, 'user_id')
+        //     .then(w => {
+        //         // console.log(w);
+        //         res.json(w);
+        //     })
+        //     .catch(err => console.error(err));
     });
 
     app.get('/search', (req, res) => {
         // selectByUsernameOrderBy(req.query.username, 'user_id', (result) => {
         //     res.json(result);
         // });
-        selectByUsernameOrderBy(req.query.username, 'user_id').then(result => {
-            res.json(result);
-        }).catch(err => {
-            console.log(err);
-        })
+        const search = async () => {
+          try {
+              const result = await selectByUsernameOrderBy(req.query.username, 'user_id');
+              res.json(result);
+          } catch (err) {
+              console.log(err);
+          }
+        };
+        search();
     });
 
     app.get('/customFilter', (req, res) => {
@@ -35,34 +52,56 @@ function api (app) {
         // selectByNameGenderIdOrderBy(req.query.name, req.query.gender, req.query.id, 'user_id', (result) => {
         //     res.json(result);
         // });
-        selectByNameGenderIdOrderBy(req.query.name, req.query.gender, req.query.id, 'user_id').then(result => {
-            res.send(result)
-        }).catch(err => {
-            console.log(err);
-        })
+
+        // selectByNameGenderIdOrderBy(req.query.name, req.query.gender, req.query.id, 'user_id').then(result => {
+        //     res.send(result)
+        // }).catch(err => {
+        //     console.log(err);
+        // })
+        const customFilter = async() => {
+            try {
+                const result = await selectByNameGenderIdOrderBy(req.query.name, req.query.gender, req.query.id, 'user_id');
+                res.send(result);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        customFilter();
     });
 
     app.post('/newUser', (req, res) => {
         // addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status, (result) => {
         //     res.json(result);
         // });
-        addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status)
-            .then(result => {
-                res.send(result);
-            }).catch(err => {
-            console.log(err);
-        })
+        const newUser = async() => {
+          try {
+              const result = await addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status);
+              res.send(result);
+          } catch (err) {
+              console.log(err);
+          }
+        };
+        newUser();
     });
 
     app.delete('/deleteUser', (req, res) => {
         // deleteUser(req.body.id, (result) => {
         //     res.json(result);
         // });
-        deleteUser(req.body.id).then(result => {
-            res.send(result);
-        }).catch(err => {
-            console.log(err);
-        })
+        // deleteUser(req.body.id).then(result => {
+        //     res.send(result);
+        // }).catch(err => {
+        //     console.log(err);
+        // })
+        const deleteing = async() => {
+            try {
+                const result = await deleteUser(req.body.id);
+                res.send(result);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        deleteing();
     });
 
     app.put('/updateUser', (req, res) => {
@@ -84,11 +123,20 @@ function api (app) {
                 status = uName.value;
             }
         });
-        updateUser(username, first_name, last_name, gender, password, status, id).then(result => {
-            res.send(result)
-        }).catch(err => {
-            console.log(err);
-        })
+        // updateUser(username, first_name, last_name, gender, password, status, id).then(result => {
+        //     res.send(result)
+        // }).catch(err => {
+        //     console.log(err);
+        // })
+        const updating = async() => {
+          try{
+              const result = await updateUser(username, first_name, last_name, gender, password, status, id);
+              res.send(result)
+          } catch (err) {
+              console.log(err);
+          }
+        };
+        updating();
     });
 };
 
