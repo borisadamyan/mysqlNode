@@ -76,8 +76,8 @@ $(document).ready(function () {
     $(document).on('click', '#editUser', function (event) {
         // event.preventDefault();
         var row = event.target.parentNode.parentNode;
-        console.log(row);
-        console.log(row.querySelectorAll('input'));
+        // console.log(row);
+        // console.log(row.querySelectorAll('input'));
         row.querySelectorAll('input').forEach(one => {
             "use strict";
             one.removeAttribute('readonly');
@@ -86,6 +86,7 @@ $(document).ready(function () {
         // event.target.nextSibling.style.display = 'block';
         event.target.style.display = 'none';
         event.target.nextElementSibling.style.display = 'inline-block';
+        event.target.nextElementSibling.nextElementSibling.style.display = 'inline-block';
     });
     $(document).on('click', '#confirmUser', function (event) {
         // event.preventDefault();
@@ -99,6 +100,7 @@ $(document).ready(function () {
         });
         // event.target.nextSibling.style.display = 'block';
         event.target.style.display = 'none';
+        event.target.nextElementSibling.style.display = 'none';
         event.target.previousElementSibling.style.display = 'inline-block';
         var rowId = event.target.parentNode.parentNode;
         var id = rowId.getElementsByClassName('idPart')[0].getAttribute('id');
@@ -123,6 +125,21 @@ $(document).ready(function () {
         //     gender
         // };
         updateUser(updateData)
+    });
+    $(document).on('click', '#cancel', function (event) {
+        // event.preventDefault();
+        var row = event.target.parentNode.parentNode;
+        // console.log(row);
+        // console.log(row.querySelectorAll('input'));
+        row.querySelectorAll('input').forEach(one => {
+
+            one.setAttribute('readonly', 'readonly');
+            one.classList.add('readonly');
+        });
+        // event.target.nextSibling.style.display = 'block';
+        event.target.style.display = 'none';
+        event.target.previousElementSibling.style.display = 'none';
+        event.target.previousElementSibling.previousElementSibling.style.display = 'inline-block';
     });
 
     /*REQUESTS*/
@@ -260,6 +277,7 @@ $(document).ready(function () {
                         <td>
                         <button id="editUser">Edit</button>
                         <button style="display: none" id="confirmUser">Save</button>
+                        <button style="display: none" id="cancel">Cancel</button>
                         <button id="deleteUserbtn">Delete</button>
                         </td>
                      `);
