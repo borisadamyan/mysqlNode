@@ -114,7 +114,7 @@ $(document).ready(function () {
             })
         });
         updateData.push({id});
-       // console.log(updateData);
+       console.log(updateData);
 
         updateUser(updateData)
     });
@@ -241,7 +241,7 @@ $(document).ready(function () {
                 setTimeout(() => {
                     $('#userUpdated').hide();
                 },2500);
-
+                $("#error").hide();
                 var id = JSON.parse(http.responseText);
                 // console.log(id.insertId);
                 // const searchData = {
@@ -251,6 +251,10 @@ $(document).ready(function () {
                 // };
                 // customSearch(searchData);
                 //console.log(JSON.parse(http.responseText.insertId));
+            }else{
+                console.log(http.responseText);
+                $("#error").text(http.responseText);
+                $("#error").show();
             }
         };
     }

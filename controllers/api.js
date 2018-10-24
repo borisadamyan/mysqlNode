@@ -7,7 +7,7 @@ const {
     updateUser
 } = require('../service/query');
 const Joi = require('joi');
-const {newUserVal,customSearchVal} = require('../validation/validation');
+const {newUserVal, customSearchVal, updateUserVal} = require('../validation/validation');
 
  function api (app) {
 
@@ -117,21 +117,29 @@ const {newUserVal,customSearchVal} = require('../validation/validation');
 
     app.put('/updateUser', (req, res) => {
         var username, first_name, last_name, password, gender, status, id;
+        const data = {};
         req.body.filter(uName => {
             // console.log(uName.key);
             id = uName.id;
+            data.id = id;
             if(uName.key === 'username'){
                 username = uName.value;
+                data.username = username;
             }else if(uName.key === 'first_name'){
                 first_name = uName.value;
+                data.first_name = first_name
             } else if(uName.key === 'last_name'){
                 last_name = uName.value;
+                data.last_name = last_name
             }else if(uName.key === 'password'){
                 password = uName.value;
+                data.password = password
             }else if(uName.key === 'addGender'){
                 gender = uName.value;
+                data.gender = gender
             }else if(uName.key === 'addStatus'){
                 status = uName.value;
+                data.status = status
             }
         });
         // updateUser(username, first_name, last_name, gender, password, status, id).then(result => {
@@ -139,6 +147,10 @@ const {newUserVal,customSearchVal} = require('../validation/validation');
         // }).catch(err => {
         //     console.log(err);
         // })
+        // console.log(data);
+
+        const result = Joi.validate(data, updateUserVal);
+         console.log(result);
         const updating = async() => {
           try{
               const result = await updateUser(username, first_name, last_name, gender, password, status, id);
@@ -147,7 +159,12 @@ const {newUserVal,customSearchVal} = require('../validation/validation');
               console.log(err);
           }
         };
-        updating();
+        if(result.error){
+            res.status(404).send(result.error.details[0].message)
+        }else{
+            updating();
+        }
+
     });
 };
 
