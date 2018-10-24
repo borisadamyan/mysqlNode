@@ -7,6 +7,7 @@ const {
     updateUser
 } = require('../service/query');
 const Joi = require('joi');
+const {newUserVal,customSearchVal} = require('../validation/validation');
 
  function api (app) {
 
@@ -59,6 +60,7 @@ const Joi = require('joi');
         // }).catch(err => {
         //     console.log(err);
         // })
+        const result = Joi.validate(req.query, customSearchVal);
         const customFilter = async() => {
             try {
                 const result = await selectByNameGenderIdOrderBy(req.query.name, req.query.gender, req.query.id, 'user_id');
@@ -66,25 +68,17 @@ const Joi = require('joi');
             } catch (err) {
                 console.log(err);
             }
+        };
+        if(result.error){
+            res.status(404).send(result.error.details[0].message);
+        } else{
+            customFilter();
         }
-        customFilter();
     });
 
     app.post('/newUser', (req, res) => {
-        // addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status, (result) => {
-        //     res.json(result);
-        // });
-        const schema = {
-            username: Joi.string().min(3).required(),
-            first_name: Joi.string().min(3).required(),
-            last_name: Joi.string().min(3).required(),
-            password: Joi.string().min(3).required(),
-            gender: Joi.required(),
-            status: Joi.required(),
-        };
-        const result = Joi.validate(req.body, schema);
 
-        // console.log(result);
+        const result = Joi.validate(req.body, newUserVal);
 
         const newUser = async() => {
           try {
@@ -97,7 +91,7 @@ const Joi = require('joi');
         if(result.error){
             res.status(404).send(result.error.details[0].message)
         }else{
-            newUser();
+             newUser();
         }
     });
 

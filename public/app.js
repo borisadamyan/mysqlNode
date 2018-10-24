@@ -170,9 +170,13 @@ $(document).ready(function () {
             dataType: 'json',
             success: function(response) {
                 console.log(response);
-                table(response)
+                table(response);
+                $("#error").hide();
             },
-            error: function(xhr) {
+            error: function(err) {
+                console.log(err.responseText);
+                $("#error").text(err.responseText);
+                $("#error").show();
             }
         });
     }
