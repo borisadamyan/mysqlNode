@@ -6,6 +6,7 @@ const {
     deleteUser,
     updateUser
 } = require('../service/query');
+const Joi = require('joi');
 
  function api (app) {
 
@@ -73,6 +74,18 @@ const {
         // addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status, (result) => {
         //     res.json(result);
         // });
+        const schema = {
+            username: Joi.string().min(3).required(),
+            first_name: Joi.string().min(3).required(),
+            last_name: Joi.string().min(3).required(),
+            password: Joi.string().min(3).required(),
+            gender: Joi.required(),
+            status: Joi.required(),
+        };
+        const result = Joi.validate(req.body, schema);
+
+        // console.log(result);
+
         const newUser = async() => {
           try {
               const result = await addNewUser(req.body.username, req.body.first_name, req.body.last_name, req.body.gender, req.body.password, req.body.status);
@@ -81,7 +94,11 @@ const {
               console.log(err);
           }
         };
-        newUser();
+        if(result.error){
+            res.status(404).send(result.error.details[0].message)
+        }else{
+            newUser();
+        }
     });
 
     app.delete('/deleteUser', (req, res) => {

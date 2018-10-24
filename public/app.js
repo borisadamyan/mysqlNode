@@ -177,30 +177,35 @@ $(document).ready(function () {
         });
     }
     function addNewUser(data) {
-        const http = new XMLHttpRequest();
-        http.open('POST', '/newUser');
-        http.setRequestHeader("Content-type", "application/json");
-        http.send(JSON.stringify(data));
-        http.onreadystatechange = function() {//Call a function when the state changes.
-            if(http.readyState == 4 && http.status == 200) {
+        $.ajax({
+            url: "/newUser",
+            type:'post',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
                 console.log("New User Added");
                 $('form#add')[0].reset();
                 $('#userAdded').show();
                 setTimeout(() => {
-                    "use strict";
                     $('#userAdded').hide();
                 },2500);
-                 var id = JSON.parse(http.responseText);
-                // console.log(id.insertId);
+                var id = response.insertId;
                 const searchData = {
-                    id: id.insertId,
+                    id: id,
                     gender: 'all',
                     name: ''
                 };
                 customSearch(searchData);
-                //console.log(JSON.parse(http.responseText.insertId));
+                $("#error").hide()
+                // console.log(JSON.parse(http.responseText.insertId));
+            },
+            error: function(err) {
+                console.log(err.responseText);
+                $("#error").text(err.responseText);
+                $("#error").show();
             }
-        };
+        });
+
     }
     function deleteUser(data) {
         const http = new XMLHttpRequest();
